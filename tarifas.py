@@ -1,36 +1,51 @@
 import streamlit as st
 
-st.title("Tabela de balcão GLS")
-quantidade = st.number_input("Quantidade de volumes", min_value=1)#st.number_input --- funcao para criar um campo de input numerico, min_value define o valor minimo permitido 
-kg = st.number_input("Peso da bagagem (kg)", min_value=0.0)
+st.title("Calculadora de Tarifa")
 
-if st.button("Calcular"):
-    
-    if kg <= 1:
-        valor = 8.05
-    elif kg >= 1.1 and kg <= 3:
-        valor = 8.94
-    elif kg >= 3.1 and kg <= 5:
-        valor = 9.61
-    elif kg >= 5.1 and kg <= 10:
-        valor = 11.18
-    elif kg >= 10.1 and kg <= 15:
-        valor = 13.41
-    elif kg >= 15.1 and kg <= 20:
-        valor = 14.75
-    elif kg >= 20.1 and kg <= 25: 
-        valor = 16.99
-    elif kg >= 25.1 and kg <= 30: 
-        valor = 17.88
-    elif kg >= 31 and kg <= 40:
-        valor = 18.46
-    else:
-        st.error("Peso acima do limite permitido.")
-        st.stop()
+# Lista para armazenar os pesos
+pesos = []
 
-    total = quantidade * valor
-    st.success(f"Valor total: R$ {total:.2f}")
+# Campo para adicionar um peso
+novo_peso = st.number_input("Peso da bagagem (kg)", min_value=0.0, step=0.1)
 
+if st.button("Adicionar bagagem"):
+    pesos.append(novo_peso)
+    st.session_state.pesos = pesos  # Guardar na sessão
+
+# Inicializar lista na sessão se não existir
+if "pesos" not in st.session_state:
+    st.session_state.pesos = []
+
+# Mostrar bagagens adicionadas
+st.write("Bagagens adicionadas:", st.session_state.pesos)
+
+# Definindo faixas de peso e valores
+faixas = [
+    (0, 1, 8.05),
+    (1.1, 3, 8.94),
+    (3.1, 5, 9.61),
+    (5.1, 10, 11.18),
+    (10.1, 15, 13.41),
+    (15.1, 20, 14.75),
+    (20.1, 25, 16.99),
+    (25.1, 30, 17.88),
+    (31, 40, 18.46),
+]
+
+if st.button("Calcular total"):
+    total = 0
+    for peso in st.session_state.pesos:
+        valor = None
+        for min_peso, max_peso, preco in faixas:
+            if min_peso <= peso <= max_peso:
+                valor = preco
+                break
+        if valor is None:
+            st.error(f"Peso {peso} kg acima do limite permitido.")
+        else:
+            total += valor
+            st.write(f"Bagagem {peso} kg: R$ {valor:.2f}")
+    st.success(f"Valor total de todas as bagagens: R$ {total:.2f}")
 
 
 print("Creat by layon")
