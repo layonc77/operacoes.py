@@ -54,9 +54,9 @@ if st.button("Calcular total"):
                 st.error(f"Produto de {peso} kg acima do limite permitido.")
                 continue
             subtotal = valor * quantidade
-            st.write(f"{quantidade} produto(s) de {peso} kg: R$ {subtotal:.2f}")
+            st.write(f"{quantidade} produto(s) de {peso} kg: € {subtotal:.2f}")
             total += subtotal
-        st.success(f"Valor total de todos os produtos: R$ {total:.2f}")
+        st.success(f"Valor total de todos os produtos: € {total:.2f}")
 
 
 print("Creat by layon")
