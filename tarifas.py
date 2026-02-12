@@ -1,25 +1,27 @@
 import streamlit as st
 
-st.title("Calculadora de Tarifa")
+st.title("Calculadora de Tarifa de Produtos")
 
-# Lista para armazenar os pesos
-pesos = []
+# Inicializar lista na sessão
+if "produtos" not in st.session_state:
+    st.session_state.produtos = []
 
-# Campo para adicionar um peso
-novo_peso = st.number_input("Peso da bagagem (kg)", min_value=0.0, step=0.1)
+# Inputs de peso e quantidade
+peso = st.number_input("Peso do produto (kg)", min_value=0.0, step=0.1)
+quantidade = st.number_input("Quantidade do produto", min_value=1, step=1)
 
-if st.button("Adicionar bagagem"):
-    pesos.append(novo_peso)
-    st.session_state.pesos = pesos  # Guardar na sessão
+# Botão para adicionar produto à lista
+if st.button("Adicionar produto"):
+    st.session_state.produtos.append((peso, quantidade))
+    st.success(f"Adicionado {quantidade} produto(s) de {peso} kg")
 
-# Inicializar lista na sessão se não existir
-if "pesos" not in st.session_state:
-    st.session_state.pesos = []
+# Mostrar produtos adicionados
+if st.session_state.produtos:
+    st.write("Produtos adicionados:")
+    for i, (p, q) in enumerate(st.session_state.produtos, start=1):
+        st.write(f"{i}. {q} produto(s) de {p} kg")
 
-# Mostrar bagagens adicionadas
-st.write("Bagagens adicionadas:", st.session_state.pesos)
-
-# Definindo faixas de peso e valores
+# Faixas de peso e valores
 faixas = [
     (0, 1, 8.05),
     (1.1, 3, 8.94),
@@ -32,20 +34,25 @@ faixas = [
     (31, 40, 18.46),
 ]
 
+# Botão para calcular total
 if st.button("Calcular total"):
-    total = 0
-    for peso in st.session_state.pesos:
-        valor = None
-        for min_peso, max_peso, preco in faixas:
-            if min_peso <= peso <= max_peso:
-                valor = preco
-                break
-        if valor is None:
-            st.error(f"Peso {peso} kg acima do limite permitido.")
-        else:
-            total += valor
-            st.write(f"Bagagem {peso} kg: R$ {valor:.2f}")
-    st.success(f"Valor total de todas as bagagens: R$ {total:.2f}")
+    if not st.session_state.produtos:
+        st.error("Nenhum produto adicionado.")
+    else:
+        total = 0
+        for peso, quantidade in st.session_state.produtos:
+            valor = None
+            for min_peso, max_peso, preco in faixas:
+                if min_peso <= peso <= max_peso:
+                    valor = preco
+                    break
+            if valor is None:
+                st.error(f"Produto de {peso} kg acima do limite permitido.")
+                continue
+            subtotal = valor * quantidade
+            st.write(f"{quantidade} produto(s) de {peso} kg: R$ {subtotal:.2f}")
+            total += subtotal
+        st.success(f"Valor total de todos os produtos: R$ {total:.2f}")
 
 
 print("Creat by layon")
