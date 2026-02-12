@@ -21,6 +21,10 @@ if st.session_state.produtos:
     for i, (p, q) in enumerate(st.session_state.produtos, start=1):
         st.write(f"{i}. {q} produto(s) de {p} kg")
 
+if st.button("Limpar produtos"):
+    st.session_state.produtos = []
+    st.success("Lista de produtos limpa.")
+
 # Faixas de peso e valores
 faixas = [
     (0, 1, 8.05),
