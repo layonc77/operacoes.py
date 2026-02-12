@@ -1,11 +1,11 @@
 import streamlit as st
 
-st.title("Calculadora de Tarifa")
-
+st.title("Tabela de balcão GLS")
+Print("creat by layon souza")
 quantidade = st.number_input("Quantidade de volumes", min_value=1)#st.number_input --- funcao para criar um campo de input numerico, min_value define o valor minimo permitido 
 kg = st.number_input("Peso da bagagem (kg)", min_value=0.0)
 
-if st.button("Tabela de balcão"):
+if st.button("Calcular"):
     
     if kg <= 1:
         valor = 8.05
