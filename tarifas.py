@@ -1,4 +1,11 @@
 import streamlit as st
+from datetime import datetime
+def func():
+    ans = 0
+    for i in range(1000000):
+        ans += i
+    return ans
+callable(func)
 
 st.title("Calculadora de Tarifa de Produtos")
 
