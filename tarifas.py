@@ -1,5 +1,9 @@
 import streamlit as st
-from datetime import datetime
+from datetime import datetime  
+
+
+global_var = 0 
+
 def func():
     ans = 0
     for i in range(1000000):
